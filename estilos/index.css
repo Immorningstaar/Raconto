@@ -13,70 +13,118 @@
   }
   
   /* HEADER */
+  /* Estilos generales del header */
+header {
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 15px 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  font-family: 'Playfair Display', serif; /* Elegante para gastronomía */
+}
+
+/* Contenedor del logo + texto */
+.logo-titulo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  transition: transform 0.3s ease;
+}
+
+.logo-titulo:hover {
+  transform: scale(1.02);
+}
+
+.logo-titulo img {
+  width: 70px;
+  height: auto;
+  border-radius: 50%;
+  border: 2px solid #e8c07d;
+  padding: 3px;
+}
+
+/* Texto del título */
+.logo-titulo h1 {
+  margin: 0;
+  font-size: 28px;
+  color: #4e1e00;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.logo-titulo h2 {
+  margin: 0;
+  font-size: 14px;
+  color: #9c6b3a;
+  font-weight: 400;
+  font-style: italic;
+}
+
+/* Estilos para la navegación */
+nav {
+  display: flex;
+  gap: 25px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #4e1e00;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 8px 12px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+/* Efecto hover elegante */
+nav a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #e8c07d;
+  transition: width 0.3s ease;
+}
+
+nav a:hover {
+  color: #e8c07d;
+}
+
+nav a:hover::after {
+  width: 100%;
+}
+
+
+
+/* Responsive para tablets/móviles */
+@media (max-width: 768px) {
   header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: linear-gradient(90deg, #f2d0a9, #d18c5c);
-    padding: 20px 40px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    flex-wrap: wrap;
+    flex-direction: column;
+    padding: 15px 10px;
   }
-  
+
   .logo-titulo {
-    display: flex;
-    align-items: center;
-    gap: 15px;
+    margin-bottom: 15px;
   }
-  
-  .logo-titulo img {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    border: 2px solid #fff;
-    background-color: #fff;
-  }
-  
-  .logo-titulo h1 {
-    font-size: 28px;
-    color: #4e1e00;
-  }
-  
-  .logo-titulo h2 {
-    font-size: 14px;
-    color: #3f3f3f;
-    font-style: italic;
-  }
-  
+
   nav {
-    display: flex;
-    gap: 25px;
-    margin-top: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
   }
-  
+
   nav a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s ease;
+    font-size: 14px;
+    padding: 6px 10px;
   }
-  
-  nav a:hover {
-    color: #2e1500;
-    text-decoration: underline;
-  }
-  
-  nav a[href*=".pdf"] {
-    font-weight: bold;
-    background-color: #e8c07d;
-    padding: 5px 10px;
-    border-radius: 4px;
-    color: #4e1e00 !important;
-  }
-  
-  nav a[href*=".pdf"]:hover {
-    background-color: #d4a73a;
-  }
+}
+
   
   /* GALERÍA */
 
