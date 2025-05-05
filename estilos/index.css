@@ -66,6 +66,18 @@
     text-decoration: underline;
   }
   
+  nav a[href*=".pdf"] {
+    font-weight: bold;
+    background-color: #e8c07d;
+    padding: 5px 10px;
+    border-radius: 4px;
+    color: #4e1e00 !important;
+  }
+  
+  nav a[href*=".pdf"]:hover {
+    background-color: #d4a73a;
+  }
+  
   /* GALERÍA */
 
   .titulo-galeria {
