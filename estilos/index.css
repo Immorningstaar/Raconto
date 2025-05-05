@@ -67,6 +67,16 @@
   }
   
   /* GALERÍA */
+
+  .titulo-galeria {
+    text-align: center;
+    font-size: 26px;
+    margin-top: 40px;
+    color: #4e1e00;
+    font-weight: bold;
+    animation: fadeIn 1s ease-in-out;
+  }
+  
   .galeria {
     display: flex;
     justify-content: center;
