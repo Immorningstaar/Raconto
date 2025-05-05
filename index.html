@@ -6,9 +6,47 @@
   <title>Raconto</title>
   <link rel="stylesheet" href="estilos/index.css" />
 </head>
+
+
+<script>
+  // Verificar si viene de un login exitoso
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.has('fromLogin')) {
+    alert('Sesión iniciada correctamente');
+    // Limpiar parámetro de URL
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
+</script>
 <body>
 
   <header>
+    <div class="user-status">
+      <span id="userNameDisplay"></span>
+      <a href="#" id="logoutLink" style="display: none;">Cerrar sesión</a>
+    </div>
+    
+    <script>
+      // Mostrar usuario logueado
+      document.addEventListener('DOMContentLoaded', function() {
+        const currentUser = JSON.parse(localStorage.getItem('raconto_currentUser'));
+        const userNameDisplay = document.getElementById('userNameDisplay');
+        const logoutLink = document.getElementById('logoutLink');
+        const accountLink = document.querySelector('nav a[href="mi-cuenta/mi-cuenta.html"]');
+    
+        if (currentUser) {
+          userNameDisplay.textContent = `Hola, ${currentUser.name}`;
+          logoutLink.style.display = 'inline';
+          if (accountLink) accountLink.style.display = 'none';
+        }
+    
+        logoutLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          localStorage.removeItem('raconto_currentUser');
+          location.reload();
+        });
+      });
+    </script>
+    
     <div class="logo-titulo">
       <img src="img/logo.png" alt="Logo Raconto" />
       <div>

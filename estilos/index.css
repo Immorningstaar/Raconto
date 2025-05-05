@@ -276,3 +276,39 @@ footer {
     display: none;
   }
 }
+/* Estado de sesión - Esquina superior derecha */
+.user-status-container {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  text-align: right;
+  padding: 5px 10px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 15px;
+  color: white;
+  font-size: 0.9rem;
+}
+
+#userNameDisplay {
+  margin-right: 8px;
+}
+
+#logoutLink {
+  color: #f1c40f;
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+#logoutLink:hover {
+  text-decoration: underline;
+}
+
+/* Ajuste para móviles */
+@media (max-width: 768px) {
+  .user-status-container {
+    position: static;
+    text-align: center;
+    margin-bottom: 10px;
+    background-color: transparent;
+  }
+}

@@ -2,14 +2,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Manejo de pestañas
     const tabs = document.querySelectorAll('.tab');
     const tabContents = document.querySelectorAll('.tab-content');
+    const loginForm = document.getElementById('loginForm'); // Añadí esta línea que faltaba
     
     tabs.forEach(tab => {
       tab.addEventListener('click', () => {
-        // Remover clase active de todos
         tabs.forEach(t => t.classList.remove('active'));
         tabContents.forEach(c => c.classList.remove('active'));
-        
-        // Agregar active al seleccionado
         tab.classList.add('active');
         const tabId = tab.getAttribute('data-tab');
         document.getElementById(tabId).classList.add('active');
@@ -29,21 +27,56 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         
         if (validatePassword() && validateConfirmPassword()) {
-          alert('Cuenta creada exitosamente! Redirigiendo...');
-          registerForm.reset();
-          document.querySelector('.tab[data-tab="login"]').click();
+          const name = document.getElementById('regName').value;
+          const email = document.getElementById('regEmail').value;
+          const password = document.getElementById('regPassword').value;
+          
+          // Guardar nuevo usuario
+          const users = JSON.parse(localStorage.getItem('raconto_users')) || [];
+          users.push({ name, email, password });
+          localStorage.setItem('raconto_users', JSON.stringify(users));
+          
+          // Guardar sesión activa
+          localStorage.setItem('raconto_currentUser', JSON.stringify({ name, email }));
+          
+          alert(`Bienvenido ${name}! Serás redirigido...`);
+          
+          // Redirección absoluta garantizada
+          setTimeout(() => {
+            const basePath = window.location.href.split('/mi-cuenta/')[0];
+            window.location.href = basePath + '/index.html?fromLogin=true';
+          }, 1500);
         }
       });
     }
   
     // Validación del formulario de login
-    const loginForm = document.getElementById('loginForm');
     if (loginForm) {
       loginForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        alert('Inicio de sesión exitoso! Redirigiendo...');
-        // Aquí iría la redirección real
-        // window.location.href = "perfil.html";
+        
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        
+        const users = JSON.parse(localStorage.getItem('raconto_users')) || [];
+        const user = users.find(u => u.email === email && u.password === password);
+        
+        if (user) {
+          localStorage.setItem('raconto_currentUser', JSON.stringify({
+            name: user.name,
+            email: user.email
+          }));
+          
+          alert('Inicio de sesión exitoso! Redirigiendo...');
+          
+          // Redirección mejorada
+          setTimeout(() => {
+            const basePath = window.location.href.split('/mi-cuenta/')[0];
+            window.location.href = basePath + '/index.html?fromLogin=true';
+          }, 1000);
+        } else {
+          alert('Credenciales incorrectas. Intente nuevamente.');
+        }
       });
     }
   
@@ -57,9 +90,9 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelector('.tab[data-tab="login"]').click();
       });
     }
-  });
+});
   
-  function validatePassword() {
+function validatePassword() {
     const password = document.getElementById('regPassword').value;
     const requirements = {
       length: password.length >= 8,
@@ -68,18 +101,15 @@ document.addEventListener('DOMContentLoaded', function() {
       symbol: /[!@#$%^&*]/.test(password)
     };
   
-    // Actualizar interfaz
     for (const [key, isValid] of Object.entries(requirements)) {
       const element = document.getElementById(`req-${key}`);
-      if (element) {
-        element.classList.toggle('valid', isValid);
-      }
+      if (element) element.classList.toggle('valid', isValid);
     }
   
     return Object.values(requirements).every(Boolean);
-  }
+}
   
-  function validateConfirmPassword() {
+function validateConfirmPassword() {
     const password = document.getElementById('regPassword').value;
     const confirm = document.getElementById('regConfirm').value;
     
@@ -89,4 +119,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     return true;
-  }
+}
