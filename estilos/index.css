@@ -132,63 +132,87 @@
   }
   
   /* FOOTER */
-  footer {
-    background-color: #4e1e00;
-    color: #fff;
-    padding: 30px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
+/* Estilos para el footer */
+footer {
+  background-color: #4e1e00; /* Color café oscuro acorde a la gastronomía */
+  color: #fff;
+  padding: 40px 20px;
+  font-family: 'Arial', sans-serif;
+  position: relative;
+}
+
+.Quienes-somos {
+  max-width: 800px;
+  margin: 0 auto 30px;
+  text-align: center;
+  font-size: 18px;
+  line-height: 1.6;
+  font-weight: 300;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  border-left: 3px solid #e8c07d;
+  border-right: 3px solid #e8c07d;
+}
+
+.info-contacto {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.info-contacto p {
+  margin: 0;
+  font-size: 16px;
+  position: relative;
+  padding: 0 15px;
+}
+
+.info-contacto p:not(:last-child)::after {
+  content: "•";
+  position: absolute;
+  right: -15px;
+  color: #e8c07d;
+}
+
+.logo-footer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.logo-footer img {
+  max-width: 120px;
+  filter: brightness(0) invert(1); /* Convierte el logo a blanco */
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
+}
+
+.logo-footer img:hover {
+  opacity: 1;
+}
+
+/* Efecto hover para los elementos de contacto */
+.info-contacto p:hover {
+  color: #e8c07d;
+  transition: color 0.3s ease;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .Quienes-somos {
+    font-size: 16px;
+    padding: 15px;
   }
   
-  .info-contacto p {
-    margin-bottom: 10px;
-    font-size: 14px;
+  .info-contacto {
+    flex-direction: column;
+    gap: 15px;
   }
   
-  .logo-footer img {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background-color: #fff;
-    padding: 5px;
+  .info-contacto p:not(:last-child)::after {
+    display: none;
   }
-  
-  /* ANIMACIÓN */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  /* RESPONSIVE */
-  @media (max-width: 768px) {
-    header {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  
-    nav {
-      margin-top: 10px;
-      justify-content: flex-start;
-      flex-wrap: wrap;
-    }
-  
-    .galeria {
-      flex-direction: column;
-      align-items: center;
-    }
-  
-    footer {
-      flex-direction: column;
-      text-align: center;
-      gap: 20px;
-    }
-  }
-  
+}
