@@ -69,14 +69,25 @@
   /* GALERÍA */
 
   .titulo-galeria {
+    position: absolute; /* Lo posiciona encima de las imágenes */
+    top: 20%; /* Lo centra verticalmente */
+    left: 50%; /* Lo centra horizontalmente */
+    transform: translate(-50%, -50%); /* Ajuste fino para centrado perfecto */
     text-align: center;
     font-size: 26px;
-    margin-top: 40px;
     color: #4e1e00;
     font-weight: bold;
     animation: fadeIn 1s ease-in-out;
-  }
-  
+    z-index: 10; /* Asegura que esté por encima de las imágenes */
+    background-color: rgba(255, 255, 255, 0.7); /* Fondo semitransparente para mejor legibilidad */
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.galeria {
+    position: relative; /* Necesario para que el título absoluto funcione dentro de esta sección */
+    margin-top: 40px; /* Mantiene el espacio superior que ya tenías */
+}
   .galeria {
     display: flex;
     justify-content: center;
