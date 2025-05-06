@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Manejo de pestañas
     const tabs = document.querySelectorAll('.tab');
     const tabContents = document.querySelectorAll('.tab-content');
-    
+  
     tabs.forEach(tab => {
       tab.addEventListener('click', () => {
         tabs.forEach(t => t.classList.remove('active'));
@@ -10,12 +10,12 @@ document.addEventListener('DOMContentLoaded', function() {
         tab.classList.add('active');
         const tabId = tab.getAttribute('data-tab');
         document.getElementById(tabId).classList.add('active');
-        
+  
         // Si es la pestaña de reservas activas, cargarlas
         if (tabId === 'reservas-activas') {
           cargarReservasActivas();
         }
-        
+  
         // Si es el historial, cargarlo
         if (tabId === 'historial') {
           cargarHistorial();
@@ -28,7 +28,13 @@ document.addEventListener('DOMContentLoaded', function() {
     if (reservaForm) {
       reservaForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        
+  
+        const usuario = JSON.parse(localStorage.getItem('raconto_currentUser'));
+        if (!usuario) {
+          alert('Debes iniciar sesión para hacer reservas');
+          return;
+        }
+  
         // Obtener datos del formulario
         const reserva = {
           id: Date.now(),
@@ -38,19 +44,32 @@ document.addEventListener('DOMContentLoaded', function() {
           sucursal: document.getElementById('sucursal').value,
           comentarios: document.getElementById('comentarios').value,
           estado: 'confirmada',
-          fechaCreacion: new Date().toISOString()
+          fechaCreacion: new Date().toISOString(),
+          usuarioNombre: usuario.name,
+          usuarioEmail: usuario.email
         };
-        
+  
+        // Validar horarios permitidos (solo 2 horarios)
+        const horariosPermitidos = ['12:00', '13:00']; // Ajusta estos valores según necesites
+        if (!horariosPermitidos.includes(reserva.hora)) {
+          alert('Por favor selecciona uno de los horarios disponibles');
+          return;
+        }
+  
         // Guardar reserva
         guardarReserva(reserva);
-        
-        // Mostrar mensaje y recargar reservas activas
-        alert('Reserva creada exitosamente!');
-        reservaForm.reset();
-        document.querySelector('.tab[data-tab="reservas-activas"]').click();
+  
+        // Mostrar confirmación con nombre de usuario
+        document.getElementById('nombreUsuarioReserva').textContent = usuario.name;
+        document.getElementById('reservaConfirmada').style.display = 'block';
+  
+        // Resetear formulario después de 2 segundos
+        setTimeout(() => {
+          reservaForm.reset();
+        }, 2000);
       });
     }
-    
+  
     // Cargar reservas activas al inicio si está en esa pestaña
     if (document.querySelector('.tab[data-tab="reservas-activas"].active')) {
       cargarReservasActivas();
@@ -59,14 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Función para guardar reserva en localStorage
   function guardarReserva(reserva) {
-    const usuario = JSON.parse(localStorage.getItem('raconto_currentUser'));
-    if (!usuario) {
-      alert('Debes iniciar sesión para hacer reservas');
-      return;
-    }
-    
     const reservas = JSON.parse(localStorage.getItem('raconto_reservas')) || [];
-    reserva.usuarioEmail = usuario.email;
     reservas.push(reserva);
     localStorage.setItem('raconto_reservas', JSON.stringify(reservas));
   }
@@ -75,29 +87,30 @@ document.addEventListener('DOMContentLoaded', function() {
   function cargarReservasActivas() {
     const usuario = JSON.parse(localStorage.getItem('raconto_currentUser'));
     if (!usuario) {
-      document.getElementById('reservas-activas-list').innerHTML = 
+      document.getElementById('reservas-activas-list').innerHTML =
         '<p>Debes iniciar sesión para ver tus reservas</p>';
       return;
     }
-    
+  
     const reservas = JSON.parse(localStorage.getItem('raconto_reservas')) || [];
     const reservasUsuario = reservas.filter(
       r => r.usuarioEmail === usuario.email && r.estado !== 'cancelada'
     );
-    
+  
     const container = document.getElementById('reservas-activas-list');
     container.innerHTML = '';
-    
+  
     if (reservasUsuario.length === 0) {
       container.innerHTML = '<p>No tienes reservas activas</p>';
       return;
     }
-    
+  
     reservasUsuario.forEach(reserva => {
       const card = document.createElement('div');
       card.className = 'reserva-card';
       card.innerHTML = `
         <h3>Reserva #${reserva.id.toString().slice(-4)}</h3>
+        <p><strong>Reservado a nombre de:</strong> ${reserva.usuarioNombre}</p>
         <div class="reserva-meta">
           <span>${formatearFecha(reserva.fecha)}</span>
           <span>${reserva.hora}</span>
@@ -109,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
       `;
       container.appendChild(card);
     });
-    
+  
     // Agregar eventos a botones de cancelar
     document.querySelectorAll('.btn-cancelar').forEach(btn => {
       btn.addEventListener('click', function() {
@@ -123,24 +136,24 @@ document.addEventListener('DOMContentLoaded', function() {
   function cargarHistorial() {
     const usuario = JSON.parse(localStorage.getItem('raconto_currentUser'));
     if (!usuario) {
-      document.getElementById('historial-reservas-list').innerHTML = 
+      document.getElementById('historial-reservas-list').innerHTML =
         '<p>Debes iniciar sesión para ver tu historial</p>';
       return;
     }
-    
+  
     const reservas = JSON.parse(localStorage.getItem('raconto_reservas')) || [];
     const reservasUsuario = reservas.filter(
       r => r.usuarioEmail === usuario.email
     ).sort((a, b) => new Date(b.fechaCreacion) - new Date(a.fechaCreacion));
-    
+  
     const container = document.getElementById('historial-reservas-list');
     container.innerHTML = '';
-    
+  
     if (reservasUsuario.length === 0) {
       container.innerHTML = '<p>No tienes reservas en tu historial</p>';
       return;
     }
-    
+  
     reservasUsuario.forEach(reserva => {
       const card = document.createElement('div');
       card.className = 'reserva-card';
@@ -162,10 +175,10 @@ document.addEventListener('DOMContentLoaded', function() {
   // Función para cancelar reserva
   function cancelarReserva(id) {
     if (!confirm('¿Estás seguro de que deseas cancelar esta reserva?')) return;
-    
+  
     const reservas = JSON.parse(localStorage.getItem('raconto_reservas')) || [];
     const reservaIndex = reservas.findIndex(r => r.id === id);
-    
+  
     if (reservaIndex !== -1) {
       reservas[reservaIndex].estado = 'cancelada';
       localStorage.setItem('raconto_reservas', JSON.stringify(reservas));

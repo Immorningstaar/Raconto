@@ -166,3 +166,47 @@
       text-align: center;
     }
   }
+  /* Agrega estos estilos al final del archivo */
+.reserva-footer {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+  }
+  
+  .btn-volver {
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+  }
+  
+  .btn-volver:hover {
+    background-color: #1a252f;
+  }
+  
+  .reserva-confirmada {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    padding: 0.8rem 1.5rem;
+    border-radius: 5px;
+    font-weight: bold;
+  }
+  
+  /* Estilos para los horarios específicos */
+  #hora {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: white;
+  }
+  
+  #hora option {
+    padding: 0.5rem;
+  }

@@ -20,6 +20,37 @@
 <body>
 
   <header>
+
+    <div id="proximaReserva" style="display: none;">
+      <h3>Tu próxima reserva</h3>
+      <div id="detalleProximaReserva"></div>
+      <a href="mi-reservas/mi-reservas.html">Ver todas mis reservas</a>
+    </div>
+    
+    <script>
+      // Mostrar próxima reserva si está logueado
+      document.addEventListener('DOMContentLoaded', function() {
+        const usuario = JSON.parse(localStorage.getItem('raconto_currentUser'));
+        if (usuario) {
+          const reservas = JSON.parse(localStorage.getItem('raconto_reservas')) || [];
+          const reservasUsuario = reservas.filter(
+            r => r.usuarioEmail === usuario.email && r.estado !== 'cancelada'
+          ).sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+          
+          if (reservasUsuario.length > 0) {
+            const proxima = reservasUsuario[0];
+            const detalle = document.getElementById('detalleProximaReserva');
+            detalle.innerHTML = `
+              <p><strong>Fecha:</strong> ${new Date(proxima.fecha).toLocaleDateString('es-ES')}</p>
+              <p><strong>Hora:</strong> ${proxima.hora}</p>
+              <p><strong>Sucursal:</strong> ${proxima.sucursal === 'los-andes' ? 'Los Andes' : 'San Felipe'}</p>
+              <p><strong>Personas:</strong> ${proxima.personas}</p>
+            `;
+            document.getElementById('proximaReserva').style.display = 'block';
+          }
+        }
+      });
+    </script>
     <div class="user-status">
       <span id="userNameDisplay"></span>
       <a href="#" id="logoutLink" style="display: none;">Cerrar sesión</a>
